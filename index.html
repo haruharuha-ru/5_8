@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE GEOCENTRIC UNIVERSE | 天動説の美学</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #d4af37;
+            --deep-blue: #0a0e17;
+            --star-white: #f0f0f0;
+        }
+
+        body {
+            background-color: var(--deep-blue);
+            color: var(--star-white);
+            font-family: 'Montserrat', 'Noto Serif JP', serif;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .gold-gradient {
+            background: linear-gradient(45deg, #b8860b, #ffd700, #b8860b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .orbit-container {
+            position: relative;
+            height: 600px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .orbit {
+            position: absolute;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 50%;
+            animation: rotate linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .planet-node {
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            background: var(--gold);
+            border-radius: 50%;
+            box-shadow: 0 0 15px var(--gold);
+        }
+
+        .earth-center {
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, #2b6cb0, #1a365d);
+            border-radius: 50%;
+            z-index: 10;
+            box-shadow: 0 0 30px rgba(66, 153, 225, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            cursor: help;
+        }
+
+        .section-fade {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease-out;
+        }
+
+        .section-fade.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        canvas#stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        .neta-badge {
+            background: var(--gold);
+            color: black;
+            padding: 2px 8px;
+            font-size: 10px;
+            font-weight: bold;
+            border-radius: 4px;
+            vertical-align: middle;
+            margin-left: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="stars"></canvas>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 px-8 py-6 flex justify-between items-center transition-all duration-500" id="navbar">
+        <div class="text-xl font-bold tracking-widest gold-gradient">GEOCENTRISM <span class="text-[10px] text-gray-500 font-light">ver 2.0 (Official)</span></div>
+        <div class="hidden md:flex space-x-8 text-sm uppercase tracking-widest">
+            <a href="#home" class="hover:text-yellow-500 transition">Concept</a>
+            <a href="#logic" class="hover:text-yellow-500 transition">Logic</a>
+            <a href="#faq" class="hover:text-yellow-500 transition">Q&A</a>
+            <a href="#philosophy" class="hover:text-yellow-500 transition">Ego</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="h-screen flex flex-col justify-center items-center text-center px-4">
+        <h1 class="text-5xl md:text-8xl font-bold mb-6 gold-gradient tracking-tighter">
+            動かないのは、<br>君が偉いから。
+        </h1>
+        <p class="text-lg md:text-xl max-w-2xl text-gray-400 font-light leading-relaxed">
+            全宇宙があなたを中心に回る、究極のホスピタリティ。<br>
+            地球は宇宙の「VIP指定席」であり、他の星々はすべてバックダンサーに過ぎません。
+        </p>
+        <div class="mt-12 animate-bounce">
+            <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Visual Orbit Section -->
+    <section class="py-24 px-4 overflow-hidden">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+            <div class="orbit-container glass rounded-full" id="orbitVisual">
+                <div class="earth-center text-[10px] font-bold" title="我々の絶対領域">HOME</div>
+            </div>
+            <div class="section-fade">
+                <h2 class="text-3xl font-bold mb-6 text-yellow-500 italic">なぜ地球は動かないのか？</h2>
+                <p class="text-gray-300 leading-relaxed mb-6">
+                    「地球が時速1,700kmで自転している」という説を信じるのは勝手ですが、それならなぜ<b>時速100kmの高速道路で感じる風より、ベランダの洗濯物の方が静かなのでしょうか？</b>答えは簡単です。止まっているからです。
+                </p>
+                <ul class="space-y-4">
+                    <li class="flex items-start">
+                        <span class="text-yellow-600 mr-2">✔</span>
+                        <span><b>乗り物酔い対策：</b> 宇宙が回れば、我々は一生酔うことがありません。<span class="neta-badge">解決済</span></span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-yellow-600 mr-2">✔</span>
+                        <span><b>電力不要：</b> 太陽が勝手に回ってくれるので、朝を呼ぶ必要がありません。<span class="neta-badge">省エネ</span></span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-yellow-600 mr-2">✔</span>
+                        <span><b>圧倒的優越感：</b> 「俺のために木星が回っている」という強いメンタルが手に入ります。<span class="neta-badge">メンタルケア</span></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Logic Section -->
+    <section id="logic" class="py-24 bg-black/40">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-16 section-fade">科学を超越した「屁理屈」</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass p-8 rounded-2xl section-fade">
+                    <h3 class="text-xl font-bold mb-4">鳥の飛行問題</h3>
+                    <p class="text-sm text-gray-400">
+                        地球が西から東へ自転しているなら、西に飛ぶ鳥は羽ばたく必要がないはずです。しかし、実際には彼らは必死に羽ばたいています。これは地球が動くことを拒否している何よりの証拠です。
+                    </p>
+                </div>
+                <div class="glass p-8 rounded-2xl section-fade">
+                    <h3 class="text-xl font-bold mb-4">星空の安定性</h3>
+                    <p class="text-sm text-gray-400">
+                        何千年も前から星座の形が変わらないのは、天球が完璧なメンテナンスを受けているからです。地球が動いていたら、今頃オリオン座の三つ星はバラバラに散らばっていることでしょう。
+                    </p>
+                </div>
+                <div class="glass p-8 rounded-2xl section-fade">
+                    <h3 class="text-xl font-bold mb-4">重力の正体</h3>
+                    <p class="text-sm text-gray-400">
+                        「重力が引き寄せている」のではなく、「宇宙が地球を愛しすぎて、離れたくないから押し付けている」というのが最新の感情物理学の見解です。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section (Neta) -->
+    <section id="faq" class="py-24 px-4 max-w-4xl mx-auto section-fade">
+        <h2 class="text-3xl font-bold mb-12 text-center gold-gradient">論破コーナー (Q&A)</h2>
+        <div class="space-y-6">
+            <div class="glass p-6 rounded-lg">
+                <p class="font-bold text-yellow-500">Q. 人工衛星から撮った「丸い地球」の写真は？</p>
+                <p class="text-gray-400 text-sm mt-2">A. 宇宙飛行士が魚眼レンズにハマっていた時期のものです。広角レンズの歪みを信じてはいけません。</p>
+            </div>
+            <div class="glass p-6 rounded-lg">
+                <p class="font-bold text-yellow-500">Q. フーコーの振り子はどう説明するの？</p>
+                <p class="text-gray-400 text-sm mt-2">A. あれは床の方がこっそり動いています。観客を楽しませるための、科学界最大のファンサービスです。</p>
+            </div>
+            <div class="glass p-6 rounded-lg">
+                <p class="font-bold text-yellow-500">Q. なぜ地動説が主流になったの？</p>
+                <p class="text-gray-400 text-sm mt-2">A. 「俺たちが宇宙の端っこの田舎者だ」と思い込んだ方が、税金を安く抑えられるという政治的判断があったとか、なかったとか。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final Message -->
+    <section id="philosophy" class="py-24 text-center section-fade">
+        <div class="max-w-4xl mx-auto px-4">
+            <h2 class="text-3xl md:text-5xl font-light italic mb-8">「真実よりも、心地よさを。」</h2>
+            <p class="text-gray-400 leading-loose">
+                ガリレオは「それでも地球は回っている」と言いましたが、私たちは言います。「それでも地球はどっしり構えている」と。<br>
+                自信を持ってください。あなたが動かなくても、宇宙の方が勝手に空気を読んで動いてくれるのです。
+            </p>
+            <div class="mt-12">
+                <button class="px-8 py-3 border border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-black transition duration-300 rounded-full text-sm tracking-widest uppercase">
+                    地動説をアンインストールする
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-12 border-t border-white/10 text-center text-gray-500 text-xs tracking-widest">
+        <p>&copy; 2024 THE GEOCENTRIC VISION PROJECT. <br class="md:hidden">※このサイトの内容は15世紀以前の常識に基づいています。</p>
+    </footer>
+
+    <script>
+        // 背景の星空
+        const canvas = document.getElementById('stars');
+        const ctx = canvas.getContext('2d');
+        let width, height, stars = [];
+
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+
+        for (let i = 0; i < 200; i++) {
+            stars.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                size: Math.random() * 1.5,
+                opacity: Math.random()
+            });
+        }
+
+        function drawStars() {
+            ctx.clearRect(0, 0, width, height);
+            stars.forEach(star => {
+                ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fill();
+                
+                star.opacity += (Math.random() - 0.5) * 0.05;
+                if (star.opacity < 0) star.opacity = 0;
+                if (star.opacity > 1) star.opacity = 1;
+            });
+            requestAnimationFrame(drawStars);
+        }
+        drawStars();
+
+        // 軌道の生成
+        const orbitContainer = document.getElementById('orbitVisual');
+        const planets = [
+            { name: '月 (Night Boss)', dist: 90, speed: 10 },
+            { name: '水星 (Swift)', dist: 140, speed: 18 },
+            { name: '金星 (Beauty)', dist: 190, speed: 25 },
+            { name: '太陽 (Main Guest)', dist: 250, speed: 35 },
+            { name: '火星 (Red)', dist: 310, speed: 50 },
+            { name: '木星 (Giant)', dist: 380, speed: 80 }
+        ];
+
+        planets.forEach(p => {
+            const orbit = document.createElement('div');
+            orbit.className = 'orbit';
+            orbit.style.width = `${p.dist * 2}px`;
+            orbit.style.height = `${p.dist * 2}px`;
+            orbit.style.animationDuration = `${p.speed}s`;
+            
+            const node = document.createElement('div');
+            node.className = 'planet-node';
+            
+            const label = document.createElement('span');
+            label.innerText = p.name;
+            label.style.position = 'absolute';
+            label.style.top = '-20px';
+            label.style.left = '15px';
+            label.style.fontSize = '9px';
+            label.style.whiteSpace = 'nowrap';
+            label.style.color = '#d4af37';
+
+            node.appendChild(label);
+            orbit.appendChild(node);
+            orbitContainer.appendChild(orbit);
+        });
+
+        // スクロールフェードイン
+        const observerOptions = { threshold: 0.1 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section-fade').forEach(el => observer.observe(el));
+
+        // ナビバー
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-black/90', 'py-4', 'border-b', 'border-white/10');
+                nav.classList.remove('py-6');
+            } else {
+                nav.classList.remove('bg-black/90', 'py-4', 'border-b', 'border-white/10');
+                nav.classList.add('py-6');
+            }
+        });
+    </script>
+</body>
+</html>
